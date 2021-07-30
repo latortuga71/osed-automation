@@ -26,7 +26,7 @@ class Reversing(pykd.eventHandler):
             print("buffer address",esp_buffer)
             print("Executing -> ba r{} {}".format("1",hex(int(esp_buffer,16))))
             #pykd.dbgCommand("ba r4 {}".format(hex(int(esp_buffer,16))))
-            self.bp_on_buffer = pykd.setBp(int(esp_buffer,16),self.on_access)
+            self.bp_on_buffer = pykd.setBp(int(esp_buffer,16),0x1,0x1,self.on_access)
             print("brrrr")
             for i in disAsm:
                 if "ret" in i:
@@ -41,7 +41,8 @@ class Reversing(pykd.eventHandler):
 
     def on_access(self):
         print("Buffer For WriteFile Accessed!")
-        print(pykd.dbgCommand("k"))
+        addr =  pykd.dbgCommand("k").split("\n")[1].split(" ")[2]
+        print(addr)
         return False
 
     
